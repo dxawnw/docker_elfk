@@ -1,0 +1,57 @@
+version: '3'
+services:
+  elasticsearch:
+    image: elasticsearch:latest
+    container_name: elasticsearch
+    environment:       
+      TZ: Asia/Shanghai
+    ports:
+      - '9200:9200'
+  logstash:
+    build: logstash/
+    container_name: logstash
+    environment:       
+      TZ: Asia/Shanghai
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    ports:
+      - "5044:5044"
+    command: logstash -f /etc/logstash/conf.d/
+    depends_on:
+      - elasticsearch
+  fluentd:
+    build: fluentd/
+    container_name: fluentd
+    environment:       
+      TZ: Asia/Shanghai
+    volumes:
+      - fluentd_data:/var/lib/docker/containers
+    ports:
+      - '24224:24224'
+    depends_on:
+      - elasticsearch
+  kibana:
+    image: kibana:latest
+    container_name: kibana
+    environment:
+      TZ: Asia/Shanghai
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    ports:
+      - '5601:5601'
+    depends_on:
+      - elasticsearch
+  nginx:
+    build: nginx/
+    container_name: nginx
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - '80:80'
+    depends_on:
+      - kibana
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.{{.FullID}}
+volumes:
+  fluentd_data: {}
