@@ -1,0 +1,26 @@
+version: '2'
+services:
+  tomcat:
+    image: tomcat:latest
+    container_name: tomcat_server
+    ports:
+      - '8080:8080'
+    logging:
+      driver: 'syslog'
+      options:
+        syslog-address: 'tcp://10.10.10.133:5001'
+        tag: docker.{{.ImageName}}/{{.Name}}/{{.ID}}
+  nginx:
+    build: nginx/
+    container_name: nginx_test
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - '8001:80'
+    depends_on:
+      - tomcat
+    logging:
+      driver: 'syslog'
+      options:
+        syslog-address: 'tcp://10.10.10.133:5001'
+        tag: docker.{{.ImageName}}/{{.Name}}/{{.ID}}

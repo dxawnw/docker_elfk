@@ -5,16 +5,22 @@ services:
     container_name: elasticsearch
     environment:       
       TZ: Asia/Shanghai
+    volumes:           
+      - es_data:/usr/share/elasticsearch/data
     ports:
       - '9200:9200'
   logstash:
-    build: logstash/
+    image: logstash:latest
     container_name: logstash
     environment:       
       TZ: Asia/Shanghai
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    volumes:
+      - ./logstash/:/etc/logstash/conf.d/
     ports:
       - "5044:5044"
+      - "5045:5045"
+      - "5001:5001"
     command: logstash -f /etc/logstash/conf.d/
     depends_on:
       - elasticsearch
@@ -23,8 +29,6 @@ services:
     container_name: fluentd
     environment:       
       TZ: Asia/Shanghai
-    volumes:
-      - fluentd_data:/var/lib/docker/containers
     ports:
       - '24224:24224'
     depends_on:
@@ -45,7 +49,7 @@ services:
     environment:
       TZ: Asia/Shanghai
     ports:
-      - '80:80'
+      - '8000:80'
     depends_on:
       - kibana
     logging:
@@ -54,4 +58,4 @@ services:
         fluentd-address: localhost:24224
         tag: docker.{{.FullID}}
 volumes:
-  fluentd_data: {}
+  es_data: {}
