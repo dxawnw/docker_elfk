@@ -1,0 +1,7 @@
+version: '2'
+services:
+  tomcat:
+    build: log4j_demo/
+    container_name: tomcat_server
+    ports:
+      - '8003:8080'
