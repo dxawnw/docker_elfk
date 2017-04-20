@@ -1,3 +1,3 @@
-¿¿log4j¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿¿
-¿¿docker-compose build¿¿¿¿Tomcat¿¿ ¿¿Tomcat ¿¿ http://¿¿¿IP:8003/test¿¿¿¿¿¿¿¿¿¿
+ä¿®æ”¹log4jé…ç½®æ–‡ä»¶çš„æœåŠ¡å™¨é…ç½®
+ä½¿ç”¨docker-compose buildå¯åŠ¨Tomcatæµ‹è¯•ï¼Œç„¶åè®¿é—®Tomcaté¡µé¢http://å®¢æˆ·ç«¯IP:8003/testï¼Œåå°ä¼šäº§ç”Ÿæ—¥å¿—ã€‚
 log4j_demo\ROOT\WEB-INF\classes\log4j.properties
