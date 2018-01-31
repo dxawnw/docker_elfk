@@ -26,6 +26,7 @@ services:
       - elasticsearch
   fluentd:
     build: fluentd/
+    image: dxawnw/fluentd_elasticsearch:v1.1.0-elasticsearch
     container_name: fluentd
     environment:       
       TZ: Asia/Shanghai
