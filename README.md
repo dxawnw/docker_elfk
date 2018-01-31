@@ -6,7 +6,6 @@
 
 1、docker-compose build
 
-
 # 启动
 
 2、docke-compose up -d
