@@ -1,14 +1,13 @@
-FROM fluent/fluentd:latest
+FROM fluent/fluentd:v1.1.0-onbuild
 
-USER root
-WORKDIR /
-RUN apk add --update netcat-openbsd && rm -rf /var/cache/apk/*
-COPY entrypoint.sh /tmp/entrypoint.sh
-RUN chmod +x /tmp/entrypoint.sh
+# below RUN includes plugin as examples elasticsearch is not required
+# you may customize including plugins as you wish
 
-ENV PATH /home/ubuntu/ruby/bin:$PATH
-RUN gem install fluent-plugin-elasticsearch
-
-ADD fluent.conf /fluentd/etc/fluent.conf
-
-CMD ["sh", "-c", "/tmp/entrypoint.sh"]
+RUN apk add --update --virtual .build-deps \
+        sudo build-base ruby-dev \
+ && sudo gem install \
+        fluent-plugin-elasticsearch \
+ && sudo gem sources --clear-all \
+ && apk del .build-deps \
+ && rm -rf /var/cache/apk/* \
+           /home/fluent/.gem/ruby/2.3.0/cache/*.gem
